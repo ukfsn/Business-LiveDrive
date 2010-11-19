@@ -27,6 +27,16 @@ Business::LiveDrive - use the livedrive.com reseller API
 
 =head1 DESCRIPTION
 
+Perl interface to the livedrive.com reseller API.
+
+You can use this interface to create, retrieve and update your users on 
+your livedrive.com reseller account.
+
+To use this you need to have registered a reseller account with 
+livedrive.com from which you need the API Key from the reseller management
+system. 
+
+See the documentation on the livedrive.com website for more information.
 
 =cut
 
@@ -42,7 +52,10 @@ sub _call {
 
 =head2 addbackup
 
-Upgrades a user account to include Backup
+    $livedrive->addbackup('123456');
+
+Upgrades a user account to include Backup. The account is specified by 
+passing the account user ID.
 
 Returns details for the upgraded account.
 
@@ -61,7 +74,16 @@ sub addbackup {
 
 =head2 addbackupwithlimit
 
+    $livedrive->addbackupwithlimit( userID => '123456', 
+        capacity => 'OneTeraByte');
+
 Upgrades a user account to include Backup with a limit as specified
+
+Parameters:
+    UserID      : the user account ID
+    capacity    : one of HalfTeraByte, OneTeraByte, OneAndAHalfTeraBytes or TwoTeraBytes
+
+Returns a hashref with the new details for the account
 
 =cut
 
@@ -96,6 +118,11 @@ Parameters:
     lastName
     cardVerificationValue
     productType         :   Backup or Briefcase or BackupAndBriefCase
+
+Note that capacity can only be set to Unlimited for Backup accounts. 
+Briefcase and BackupAndBriefCase accounts cannot be unlimited.
+
+Returns a hashref with details for the new account.
 
 =cut
 
