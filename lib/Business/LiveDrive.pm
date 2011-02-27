@@ -47,6 +47,9 @@ sub _call {
     my ($result, $status, $error) = 
         LiveDriveAPI->$method($self->apiKey, @args);
     if ( $error ) { croak($error); }
+    if ( ! $result ) {
+        croak("Unable to connect to LiveDrive API");
+    }
     return $result;
 }
 
@@ -223,6 +226,11 @@ sub updateuser {
 =head2 upgradeuser
 
 Adds briefcase to the user or upgrades a user to a briefcase of a given size.
+
+Parameters:
+    userID : The ID of the customer account
+    capacity : HalfTeraByte or OneTeraByte or OneAndAHalfTeraBytes or TwoTeraBytes
+    cardVerificationValue : the CV2 of the card used to register the reseller account
 
 =cut
 
