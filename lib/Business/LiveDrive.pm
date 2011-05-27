@@ -249,6 +249,27 @@ sub upgradeuser {
     return $res;
 }
 
+=head2 closeuser
+
+    $livedrive->closeuser('123456');
+
+Closes a user account and deletes all backup and briefcase storage under 
+that user account.
+
+=cut
+
+sub closeuser {
+    my ($self, $id) = @_;
+    croak("You must pass the user id") unless $id;
+    my $res = $self->_call("CloseUser", qq/$id/);
+    if ( $res->{Header}->{Code} ne 'UserClosed' ) {
+        croak($res->{Header}->{Description});
+    }
+    delete $res->{Header};
+    return $res;
+}
+
+
 =head1 SEE ALSO
 
 http://www.livedrive.com/ for the API documentation
