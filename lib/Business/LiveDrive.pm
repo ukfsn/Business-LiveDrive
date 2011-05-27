@@ -307,6 +307,33 @@ sub addbusinessuser {
     return $res;
 }
 
+=head2 adduserstobusiness
+
+    $livedrive->adduserstobusiness( %parameters );
+
+Parameters:
+    userID                  The ID of the customer account
+    cardVerificationValue   
+    productType             
+    userCapacity            
+
+=cut
+
+sub adduserstobusiness {
+    my ($self, %args) = @_;
+    my @params = ();
+    for my $p (qw/userID cardVerificationValue productType userCapacity /) {
+        croak("You must pass the $p parameter") unless $args{$p};
+        push @params, $args{$p};
+    }
+    my $res = $self->_call("AddUsersToBusiness", @params);
+    if ( $res->{Header}->{Code} ne 'UserAdded' ) {
+        croak($res->{Header}->{Description});
+    }
+    delete $res->{Header};
+    return $res;
+}
+
 =head1 SEE ALSO
 
 http://www.livedrive.com/ for the API documentation
