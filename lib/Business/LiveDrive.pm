@@ -95,7 +95,7 @@ sub addbackupwithlimit {
     my @params = ();
     foreach (qw/userID capacity/) {
         croak("You must pass the $_ parameter") unless $args{$_};
-        push @params, $_;
+        push @params, $args{$_};
     }
     my $res = $self->_call("AddBackupWithLimit", @params);
     if ( $res->{Header}->{Code} ne 'UserUpgraded' ) {
@@ -269,6 +269,43 @@ sub closeuser {
     return $res;
 }
 
+=cut addbusinessuser
+
+    $livedrive->addbusinessuser( %parameters );
+
+Add a Business User account. You must pass all of the parameters below.
+
+Parameters:
+    email
+    password
+    confirmPassword
+    subDomain
+    firstName
+    lastName
+    cardVerificationValue
+    productType
+    companyName
+    userCapacity
+    capacity                Unlimited or HalfTeraByte or OneTeraByte or OneAndAHalfTeraBytes or TwoTeraBytes
+
+=cut
+
+sub addbusinessuser {
+    my ($self, %args) = @_;
+    my @params = ();
+    for my $p (qw/email password confirmPassword subDomain firstName 
+                  lastName cardVerificationValue productType 
+                  companyName userCapacity capacity/) {
+        croak("You must pass the $p parameter") unless $args{$p};
+        push @params, $args{$p};
+    }
+    my $res = $self->_call("AddBusinessUser", @params);
+    if ( $res->{Header}->{Code} ne 'UserAdded' ) {
+        croak($res->{Header}->{Description});
+    }
+    delete $res->{Header};
+    return $res;
+}
 
 =head1 SEE ALSO
 
